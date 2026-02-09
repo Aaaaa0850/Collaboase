@@ -1,0 +1,27 @@
+{
+  "name": "collaboase",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.2",
+    "@astrojs/vue": "^5.1.4",
+    "@tidbcloud/serverless": "^0.2.0",
+    "astro": "^5.17.1",
+    "better-auth": "^1.4.18",
+    "dotenv": "^17.2.4",
+    "drizzle-orm": "^0.45.1",
+    "hono": "^4.11.9",
+    "vue": "^3.5.28",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.9",
+    "tsx": "^4.21.0"
+  }
+}
