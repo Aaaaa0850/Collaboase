@@ -1,10 +1,17 @@
 import { betterAuth } from 'better-auth/minimal'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '../index'
+import * as schema from '../db/schema'
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
-		provider: 'mysql'
+		provider: 'sqlite',
+		schema: {
+			user: schema.user,
+			session: schema.session,
+			account: schema.account,
+			verification: schema.verification,
+		}
 	}),
 	baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:4321',
 	socialProviders: {
@@ -14,11 +21,22 @@ export const auth = betterAuth({
 		},
 	},
 	session: {
+		strategy: "jwt",
 		cookieCache: {
 			enabled: true,
 			maxAge: 60 * 60,
-			strategy: "compact"
 		},
+		expiresIn: 60 * 60 * 24 * 7,
+		updateAge: 60 * 60 * 24,
 		disableSessionRefresh: true
+	},
+	account: {
+		accountLinking: {
+			enabled: false
+		}
+	},
+	emailAndPassword: {
+		enabled: true,
+		requireEmailVerification: false
 	}
 })

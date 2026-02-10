@@ -1,16 +1,16 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-//import node from '@astrojs/node';
+import node from '@astrojs/node';
 
 import vue from '@astrojs/vue';
 
-import netlify from '@astrojs/netlify';
+//import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: netlify(),
+  adapter: node({ mode: 'standalone' }),
 
   integrations: [vue()]
 });
