@@ -8,6 +8,6 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 	return auth.handler(c.req.raw);
 });
 
-export const all: APIRoute = async ({ request }) => {
+export const ALL: APIRoute = async ({ request }) => {
 	return app.fetch(request);
 }
