@@ -87,6 +87,100 @@ export const verification = sqliteTable(
 	(table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const projects = sqliteTable("projects", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	description: text("description"),
+	ownerId: text("owner_id").notNull(),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.notNull(),
+},
+	(table) => [index("projects_updatedAt_idx").on(table.updatedAt)],
+)
+
+export const projectMembers = sqliteTable("project_members", {
+	id: text("id").primaryKey(),
+	projectId: text("project_id").notNull(),
+	userId: text("user_id").notNull(),
+	role: text("role").notNull(),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.notNull(),
+},
+	(table) => [index("project_members_projectId_idx").on(table.projectId)],
+)
+
+export const projectLinks = sqliteTable("project_links", {
+	id: text("id").primaryKey(),
+	projectId: text("project_id").notNull(),
+	url: text("url").notNull(),
+	description: text("description"),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.notNull(),
+},
+	(table) => [index("project_links_projectId_idx").on(table.projectId)],
+)
+
+export const projectTasks = sqliteTable("project_tasks", {
+	id: text("id").primaryKey(),
+	projectId: text("project_id").notNull(),
+	title: text("title").notNull(),
+	description: text("description"),
+	status: text("status").notNull(),
+	assignedTo: text("assigned_to"),
+	dueDate: integer("due_date", { mode: "timestamp_ms" }),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.notNull(),
+},
+	(table) => [index("project_tasks_projectId_idx").on(table.projectId, table.status)],
+)
+
+export const projectRelations = relations(projects, ({ many }) => ({
+	members: many(projectMembers),
+	links: many(projectLinks),
+	tasks: many(projectTasks),
+}));
+
+export const projectMemberRelations = relations(projectMembers, ({ one }) => ({
+	project: one(projects, {
+		fields: [projectMembers.projectId],
+		references: [projects.id],
+	}),
+}));
+
+export const projectLinkRelations = relations(projectLinks, ({ one }) => ({
+	project: one(projects, {
+		fields: [projectLinks.projectId],
+		references: [projects.id],
+	}),
+}));
+
+export const projectTaskRelations = relations(projectTasks, ({ one }) => ({
+	project: one(projects, {
+		fields: [projectTasks.projectId],
+		references: [projects.id],
+	}),
+}));
+
 export const userRelations = relations(user, ({ many }) => ({
 	sessions: many(session),
 	accounts: many(account),
@@ -105,3 +199,14 @@ export const accountRelations = relations(account, ({ one }) => ({
 		references: [user.id],
 	}),
 }));
+
+export default {
+	user,
+	session,
+	account,
+	verification,
+	projects,
+	projectMembers,
+	projectLinks,
+	projectTasks,
+};
