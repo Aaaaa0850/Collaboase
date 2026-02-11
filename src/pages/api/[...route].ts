@@ -4,9 +4,11 @@ import type { APIRoute } from "astro";
 
 const app = new Hono();
 
-app.on(["POST", "GET"], "/api/auth/*", (c) => {
+const routes = app.on(["POST", "GET"], "/api/auth/*", (c) => {
 	return auth.handler(c.req.raw);
 });
+
+export type AppType = typeof routes
 
 export const ALL: APIRoute = async ({ request }) => {
 	return app.fetch(request);
