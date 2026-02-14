@@ -8,6 +8,7 @@
     "dist"
   ],
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "types": ["./worker-configuration.d.ts"]
   }
 }
