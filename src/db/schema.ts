@@ -182,6 +182,17 @@ export const projectTasks = sqliteTable("project_tasks", {
 	(table) => [index("project_tasks_projectId_idx").on(table.projectId, table.status)],
 )
 
+export const deliverable = sqliteTable("deliverable", {
+	id: text("id").primaryKey(),
+	projectJoinMemberValue: integer("project_join_member_value").notNull(),
+	comment: text("comment"),
+	url: text("url").notNull(),
+	description: text("description"),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+});
+
 export const projectRelations = relations(projects, ({ many }) => ({
 	members: many(projectMembers),
 	links: many(projectLinks),
