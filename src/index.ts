@@ -1,5 +1,12 @@
-import { connect } from '@tidbcloud/serverless';
-import { drizzle } from 'drizzle-orm/tidb-serverless';
+import { drizzle } from "drizzle-orm/libsql"
+import { createClient } from "@libsql/client"
+import * as schema from './db/schema'
 
-const client = connect({ url: process.env.DATABASE_URL! });
-const db = drizzle({ client: client });
+export const getDb = (env: { TURSO_DB_URL: string; TURSO_AUTH_TOKEN: string }) => {
+	const client = createClient({
+		url: env.TURSO_DB_URL,
+		authToken: env.TURSO_AUTH_TOKEN,
+	})
+	const db = drizzle(client, { schema })
+	return db
+}
