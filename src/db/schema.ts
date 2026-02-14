@@ -101,7 +101,7 @@ export const projects = sqliteTable("projects", {
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
 },
-	(table) => [index("projects_updatedAt_idx").on(table.updatedAt)],
+	(table) => [index("projects_updatedAt_idx").on(table.updatedAt, table.projectTag, table.seriousnessTag)],
 )
 
 export const userJoinProject = sqliteTable("user_join_project", {

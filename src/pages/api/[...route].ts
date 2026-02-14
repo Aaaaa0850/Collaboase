@@ -18,7 +18,7 @@ interface Variables {
 
 const app = new Hono<{ Bindings: Bindings, Variables: Variables }>();
 
-const routes = app
+const _routes = app
 	.on(["POST", "GET"], "/api/auth/*", (c) => {
 		return auth(c.env).handler(c.req.raw);
 	})
@@ -36,7 +36,7 @@ const routes = app
 	})
 	.route("/api/project", project);
 
-export type AppType = typeof routes
+export type AppType = typeof _routes
 
 export const ALL: APIRoute = async ({ request }) => {
 	return app.fetch(request);
