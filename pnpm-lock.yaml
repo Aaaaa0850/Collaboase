@@ -22,6 +22,9 @@ importers:
       '@astrojs/vue':
         specifier: ^5.1.4
         version: 5.1.4(@types/node@25.2.3)(astro@5.17.1(@netlify/blobs@10.6.0)(@types/node@25.2.3)(@upstash/redis@1.36.2)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(tsx@4.21.0)(vue@3.5.28(typescript@5.9.3))(yaml@2.8.2)
+      '@hono/zod-validator':
+        specifier: ^0.7.6
+        version: 0.7.6(hono@4.11.9)(zod@4.3.6)
       '@libsql/client':
         specifier: ^0.17.0
         version: 0.17.0
@@ -43,6 +46,9 @@ importers:
       hono:
         specifier: ^4.11.9
         version: 4.11.9
+      nanoid:
+        specifier: ^5.1.6
+        version: 5.1.6
       vue:
         specifier: ^3.5.28
         version: 3.5.28(typescript@5.9.3)
@@ -709,6 +715,12 @@ packages:
 
   '@fastify/busboy@3.2.0':
     resolution: {integrity: sha512-m9FVDXU3GT2ITSe0UaMA5rU3QkfC/UXtCU8y0gSN/GugTqtVldOBWIB5V6V3sbmenVZUIpU6f+mPEO2+m5iTaA==}
+
+  '@hono/zod-validator@0.7.6':
+    resolution: {integrity: sha512-Io1B6d011Gj1KknV4rXYz4le5+5EubcWEU/speUjuw9XMMIaP3n78yXLhjd2A3PXaXaUwEAluOiAyLqhBEJgsw==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.25.0 || ^4.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -4281,6 +4293,11 @@ snapshots:
 
   '@fastify/busboy@3.2.0':
     optional: true
+
+  '@hono/zod-validator@0.7.6(hono@4.11.9)(zod@4.3.6)':
+    dependencies:
+      hono: 4.11.9
+      zod: 4.3.6
 
   '@humanfs/core@0.19.1': {}
 

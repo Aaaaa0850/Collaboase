@@ -18,6 +18,7 @@
     "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/node": "^9.5.2",
     "@astrojs/vue": "^5.1.4",
+    "@hono/zod-validator": "^0.7.6",
     "@libsql/client": "^0.17.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
@@ -25,6 +26,7 @@
     "dotenv": "^17.2.4",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.11.9",
+    "nanoid": "^5.1.6",
     "vue": "^3.5.28",
     "vue-router": "^5.0.2",
     "zod": "^4.3.6"
