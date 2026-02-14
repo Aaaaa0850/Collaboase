@@ -17,6 +17,7 @@ pnpm-debug.log*
 .env
 .env.local
 .env.production
+.dev.vars
 
 # macOS-specific files
 .DS_Store
@@ -26,9 +27,12 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+netlify.toml
 
 # Local VS Code folder
 .vscode/
 
 # Git folder
 .git/
+
+

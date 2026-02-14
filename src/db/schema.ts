@@ -91,7 +91,8 @@ export const projects = sqliteTable("projects", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
-	ownerId: text("owner_id").notNull(),
+	projectTag: text("project_tag").notNull().unique(),
+	seriousnessTag: text("seriousness_tag").notNull().unique(),
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),
@@ -101,6 +102,33 @@ export const projects = sqliteTable("projects", {
 		.notNull(),
 },
 	(table) => [index("projects_updatedAt_idx").on(table.updatedAt)],
+)
+
+export const userJoinProject = sqliteTable("user_join_project", {
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	projectId: text("project_id")
+		.notNull()
+		.references(() => projects.id, { onDelete: "cascade" }),
+},
+	(table) => [index("user_join_project_userId_idx").on(table.userId), index("user_join_project_projectId_idx").on(table.projectId)],
+)
+
+export const projectJoinRequests = sqliteTable("project_join_requests", {
+	id: text("id").primaryKey(),
+	projectId: text("project_id").notNull(),
+	userId: text("user_id").notNull(),
+	statement: text("statement"),
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.notNull(),
+},
+	(table) => [index("project_join_requests_projectId_idx").on(table.projectId)],
 )
 
 export const projectMembers = sqliteTable("project_members", {
@@ -158,6 +186,21 @@ export const projectRelations = relations(projects, ({ many }) => ({
 	members: many(projectMembers),
 	links: many(projectLinks),
 	tasks: many(projectTasks),
+	joinRequests: many(projectJoinRequests),
+	userJoins: many(userJoinProject),
+}));
+
+export const userRelations = relations(user, ({ many }) => ({
+	sessions: many(session),
+	accounts: many(account),
+	userJoins: many(userJoinProject),
+}));
+
+export const projectJoinRequestRelations = relations(projectJoinRequests, ({ one }) => ({
+	project: one(projects, {
+		fields: [projectJoinRequests.projectId],
+		references: [projects.id],
+	}),
 }));
 
 export const projectMemberRelations = relations(projectMembers, ({ one }) => ({
@@ -181,10 +224,7 @@ export const projectTaskRelations = relations(projectTasks, ({ one }) => ({
 	}),
 }));
 
-export const userRelations = relations(user, ({ many }) => ({
-	sessions: many(session),
-	accounts: many(account),
-}));
+
 
 export const sessionRelations = relations(session, ({ one }) => ({
 	user: one(user, {
@@ -209,4 +249,6 @@ export default {
 	projectMembers,
 	projectLinks,
 	projectTasks,
+	projectJoinRequests,
+	userJoinProject,
 };

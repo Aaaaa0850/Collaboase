@@ -11,10 +11,11 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:reset": "drizzle-kit reset",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.vue"
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.6.4",
+    "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/node": "^9.5.2",
     "@astrojs/vue": "^5.1.4",
     "@libsql/client": "^0.17.0",
@@ -29,8 +30,14 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
     "drizzle-kit": "^0.31.9",
+    "eslint": "^10.0.0",
+    "eslint-plugin-vue": "^10.8.0",
     "tailwindcss": "^4.1.18",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "vue-eslint-parser": "^10.4.0"
   }
 }
