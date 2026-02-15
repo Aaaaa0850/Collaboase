@@ -75,7 +75,7 @@ const _routes = app
 	.post('/',
 		zValidator('json', createProjectSchema, (result, c) => {
 			if (!result.success) {
-				return c.text('Invalid!', 400)
+				return c.json({ error: '無効な入力' }, 400);
 			}
 		}), async (c) => {
 			const user = c.get('user');
@@ -99,6 +99,37 @@ const _routes = app
 				return c.json({ id, name, description, projectTag, seriousnessTag });
 			} catch (error) {
 				console.error('Error creating project:', error);
+				return c.json({ error: 'サーバエラー' }, 500);
+			}
+		})
+	.put('/:id',
+		zValidator('json', createProjectSchema, (result, c) => {
+			if (!result.success) {
+				return c.json({ error: '無効な入力' }, 400);
+			}
+		}),
+		async (c) => {
+			const user = c.get('user');
+			if (!user) {
+				return c.json({ error: 'Unauthorized' }, 401);
+			}
+			const { id } = c.req.param();
+			const { name, description, projectTag, seriousnessTag } = c.req.valid('json');
+			const db = getDb({
+				TURSO_DB_URL: c.env.TURSO_DB_URL,
+				TURSO_AUTH_TOKEN: c.env.TURSO_AUTH_TOKEN
+			});
+			try {
+				await db.update(projects).set({
+					name,
+					description,
+					projectTag,
+					seriousnessTag,
+					updatedAt: new Date(),
+				}).where(eq(projects.id, id));
+				return c.json({ id, name, description, projectTag, seriousnessTag });
+			} catch (error) {
+				console.error('Error updating project:', error);
 				return c.json({ error: 'サーバエラー' }, 500);
 			}
 		});
